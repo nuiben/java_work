@@ -1,0 +1,219 @@
+R1.1 Explain the difference between using a computer program and programming a computer.
+	A computer program is an application which has already been defined to perform a specific function. An application is usually compiled into machine code and cannot be altered without the source code.
+	Programming a computer involves writing logical arguments which can be executed as commands saved for later use as an application (computer program).
+
+R1.2 Which parts of a computer can store program code? Which can store user data?
+	Program code is stored in the computer's memory, known as RAM (or VRAM for GPUs). Active memory is only stored as long as the computer is running.
+	User data is stored in hard drives (HDD or SSD), optical drives such as USB memory sticks, and cloud servers which store data remotely via an internet connection.
+
+R1.3 Which parts of a computer serve to give information to the user? Which parts take user input?
+	Information is presented to the user through the monitor (visual information) or speakers (audio information).
+	User inputs are taken in through other peripheral devices such as mouse and keyboards, microphones, video cameras, and other devices connecting through USB.
+
+R1.4 A toaster is a single-function device, but a computer can be programmed to carry out different tasks. Is your cell phone a single-function device, or is it a programmable computer? 
+     (Y our answer will depend on your cell phone model.)
+	My device is a smartphone which can be programmed. Even older cell phones were programmed to display information on the digital screen, though they were not necessarily "programmable".
+
+R1.5 Explain two benefits of using Java over machine code. 
+	Java is preferable to machine code because:
+	- It is easier for the user to read and interpret.
+	- It is safer to use because it has features which end the program if it attempts to do anything harmful to the PC/device.
+
+R1.6 On your own computer or on a lab computer, find the exact location (folder or directory name) of
+	A. The sample file HelloPrinter.java , which you wrote with the editor. 
+		C:\Users\Ben\Desktop\java_work
+	B. The Java program launcher java.exe or java.
+		C:\Program Files\Java\jdk-15\bin
+	C. The library file rt.jar  that contains the run-time library.
+		C:\Program Files\Java\jdk-15\lib	--> jrt-fs.jar
+		C:\Program Files\Java\jre1.8.0_261\lib	--> rt.jar
+
+R1.7  What does this program print? 
+
+	public class Test 
+	{    
+		public static void main(String[] args)    
+		{       
+			System.out.println("39 + 3");       
+			System.out.println(39 + 3);    
+		}
+	}
+
+	OUTPUT:
+	Line 1: 39 + 3
+	Line 2: 42
+
+R1.8 What does this program print? Pay close attention to spaces. 
+
+	public class Test 
+	{
+		public static void main(String[] args)    
+		{       
+			System.out.print("Hello");       
+			System.out.println("World");    
+		} 
+	}
+
+	OUTPUT:
+	Line 1: HelloWorld
+
+R1.9 What is the compile-time error in this program? 
+
+	public class Test 
+	{    
+		public static void main(String[] args)    
+		{       
+			System.out.println("Hello", "World!");    
+		} 
+	}
+
+	"ERROR: Exception in thread "main" java.lang.Error: Unresolved compilation problem: 
+      	The method println(String) in the type PrintStream is not applicable for the arguments (String, String)
+	at Test.main(R1_9.java:5)"
+
+	The method is only allowed one String variable, the "," between the two string variables indicates that a second argument is being input to the method.
+
+R1.11 How do you discover syntax errors? How do you discover logic errors?
+	Syntax errors (compile-time errors) will be displayed to the user in the output console.
+	Logic errors must be discovered by running the program and seeing if it works as intended. Bugs are only caught in testing or when reported by users.
+
+
+R1.12 The cafeteria offers a discount card for sale that entitles you, during a certain period, to a free meal whenever you have bought a given number of meals at the regular price. 
+      The exact details of the offer change from time to time. Describe an algorithm that lets you determine whether a particular offer is a good buy. What other inputs do you need?
+
+	The algorithm would need to assign a variable which stores the regular price of a meal.
+	A second variable would need to be used to store the cost of the card.
+	A third for the discount percentage.
+	A fourth for the duration of the cards available use.
+	A fifth variable would be needed to estimate the number of meals consumed per week (or t, whichever unit of time matches the the duration of the discount card availability.
+	
+	If the discount card amounted to 20% off and was valid for four weeks.
+	The algorithm would multiply the % times the regular price of a meal, multiply that by the number of meals consumed per week (or "t"), then multiply that number by 4*
+		
+		*(or 28/29/30/31 if using days, 1 if using months, 5 if business/school days in a week, etc.)
+	
+	The product of the above equation would be stored as "value of discount card"
+	IF "value of discount card" > "cost of discount card", then output "GOOD DEAL", else output "BAD DEAL"
+
+
+R1.13 Write an algorithm to settle the following question: A bank account starts out with $10,000. Interest is compounded monthly at 6 percent per year (0.5 percent per month). 
+      Every month, $500 is withdrawn to meet college expenses. After how many years is the account depleted?
+	
+	public class R1_13_DepletedAccount
+	{
+	    public static void main(String[] args)
+ 	   {
+        	double balance = 10000;
+	        double month;
+	        month = 0;
+	        while (balance > 0)
+	        {
+	            balance = balance - 500;
+	            balance = balance * 1.05;
+				month++;
+	            System.out.println("Month = " + month);
+	            System.out.println("Balance = " + balance);
+	        }
+        	double year = month/12;
+	        System.out.println("Account depleted after " + year);
+	        System.out.print(" years.");
+	    }	
+	}
+
+R1.14 Consider the question in Exercise R1.13. Suppose the numbers ($10,000, 6 percent, $500) were user selectable. 
+      Are there values for which the algorithm you developed would not terminate? 
+      If so, change the algorithm to make sure it always terminates.
+
+	I'm not sure how to interface with the user yet but it would look something like this:
+	
+	public class R1_14_DepletedAccount
+	{
+	    public static void main(String[] args)
+ 	   {
+        	double balance = user.input();
+		double monthly_withdraw = user.input();
+		double interest_rt = user.input();
+	        double month;
+	        month = 0;
+	        while (balance > 0)
+	        {
+	            balance = balance - monthly_withdraw;
+	            balance = balance * 1 + (interest_rt / 12);
+				month++;
+	            System.out.println("Month = " + month);
+	            System.out.println("Balance = " + balance);
+	        }
+        	double year = month/12;
+	        System.out.println("Account depleted after " + year);
+	        System.out.print(" years.");
+	    }	
+	}
+
+	The algorithm would not terminate a an input with a "," or a decimal "."
+
+R1.16 In How To 1.1, you made assumptions about the price of gas and annual usage to compare cars. Ideally, you would like to know 
+      which car is the better deal without making these assumptions. Why can’t a computer program solve that problem?"
+
+
+ 	The computer can't know what the actual price of gas will be, we could use estimates based off prior year prices if we had the data, but even that would be a prediction (a fancy assumption).
+
+
+R1.17 Suppose you put your younger brother in charge of backing up your work. Write a set of detailed instructions for carrying out his task. Explain how often he should do
+      it, and what files he needs to copy from which folder to which location. Explain how he should verify that the backup was carried out correctly.
+
+	When I press ctr+s, copy the file I saved to the directory <Generic\Dropbox\Filepath>
+
+R1.18 Write pseudocode for an algorithm that describes how to prepare Sunday breakfast
+      in your household.
+
+	Pancakes
+		Get bowl
+		Add 2 eggs
+		add granulated sugar
+			beat eggs with whisk
+		add 200 ml milk
+		add flour 1.25 cups
+		add 2 tsp of vanilla powder
+		mix again
+	Oranges
+		While Orange <> Peeled
+			For each layer p
+				Peel orange;
+				Orange -= 1;
+		cut into sixths
+	Coffee
+		Place (x) coffee beans in filter
+		Start hot water
+	Bacon
+		Heat grill to x degrees
+		Lay strips for y minutes
+		flip strips
+		cook for y minutes
+		pour grease into separate container
+	Toast
+		Place bread into toaster for z minutes
+		remove toast
+		apply spread of choice
+
+
+R.19 The ancient Babylonians had an algorithm for determining the square root of a number a. Start with an initial guess of a / 2. Then find the average of your guess g and
+     a / g. That’s your next guess. Repeat until two consecutive guesses are close enough. Write pseudocode for this algorithm.
+
+	number = a
+	g = a/2
+	p = 1
+	while (p > 0.000001)
+		x = a/g
+		nx_g = ((g + x) / 2)
+		g = nx_g
+		p = g - x
+	system.out.println("Sqrt of a is approximately " + g);
+	
+
+
+
+
+
+
+
+
