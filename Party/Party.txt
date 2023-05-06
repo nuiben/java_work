@@ -1,0 +1,195 @@
+// Written by Ben Porter
+// For CS 311 - Artificial Intelligence Project 2
+
+// To maintain professionalism and remove personal bias, the 'political parties' for this assignment have been substituted
+// for the 4 Nations of Avatar The Last Air Bender (Water, Air, Fire, Earth)
+// Functionally the program is identical to a political party survey, the questions and data could be substituted
+// for real political parties and questions relating to those.
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Party {
+    static Scanner scan = new Scanner(System.in); // Allows to record user input
+
+    public static void main(String[] args) {
+        String[] results = new String[6];
+        System.out.println("Hello, please enter your name to get started: "); // Get username
+        String user = scan.nextLine();
+        System.out.println("Great, let's start off with a few basic questions.");
+
+        // Question 1
+        System.out.println("What would you prefer as a pet?");
+        System.out.println("A: Leopard Caribou"); // Water
+        System.out.println("B: Flying Bison"); // Air
+        System.out.println("C: Dragon"); // Fire
+        System.out.println("D: Lion Turtle"); // Earth
+        String input = scan.nextLine(); // Read user input
+        results[0] = selectionToString(input);
+
+        // Question 2
+        System.out.println("Where would you rather go on holiday?");
+        System.out.println("A: An island getaway, located somewhere remote and surrounded by ocean."); // Water
+        System.out.println("B: Hiking on a big mountain with plenty of great views."); // Air
+        System.out.println("C: A land of smoldering ash and volcanoes, devoid of life and anything nice."); // Fire
+        System.out.println("D: To the country side for me."); // Earth
+        input = scan.nextLine();
+        results[1] = selectionToString(input);
+        // Question 3
+        System.out.println("What is your greatest virtue?");
+        System.out.println("A: Love"); // Water
+        System.out.println("B: Joy"); // Air
+        System.out.println("C: Passion"); // Fire
+        System.out.println("D: Dilligence"); // Earth
+        input = scan.nextLine();
+        results[2] = selectionToString(input);
+        // Question 4
+        System.out.println("What is your weakness?");
+        System.out.println("A: Being too passive"); // Water
+        System.out.println("B: Being a bit scatterbrained"); // Air
+        System.out.println("C: My hot temper"); // Fire
+        System.out.println("D: I'm stuck in my ways"); // Earth
+        input = scan.nextLine();
+        results[3] = selectionToString(input);
+        // Question 5
+        System.out.println("How would your friends describe you?");
+        System.out.println("A: Kind and compassionate"); // Water
+        System.out.println("B: Easy going and free spirited"); // Air
+        System.out.println("C: Determined and focused"); // Fire
+        System.out.println("D: Well-grounded and practical"); // Earth
+        input = scan.nextLine();
+        results[4] = selectionToString(input);
+
+        // At this point the program will try to guess the user's element.
+        int guess = eduGuess(results); //see eduGuess method below and details on ML implementation
+        if (guess == 1) {
+            System.out.println("My guess is that you are from the Water Nation.");
+        } else if (guess == 2) {
+            System.out.println("My guess is that you are from the Air Nation.");
+        } else if (guess == 3) {
+            System.out.println("My guess is that you are from the Fire Nation.");
+        } else {
+            System.out.println("My guess is that you are from the Earth Nation.");
+        }
+        // Identifier (Question 6)
+        System.out.println("Just so we are clear, what Nation from Avatar the Last Airbender do you affiliate with?");
+        System.out.println("A: Water Nation"); // Water
+        System.out.println("B: Air Nation"); // Air
+        System.out.println("C: Fire Nation"); // Fire
+        System.out.println("D: Earth Nation"); // Earth
+        input = scan.nextLine(); // Read user input
+        results[5] = selectionToString(input);
+        // This is how the program knows where to store user's data.
+        String identifier = input;
+        if (identifier.equalsIgnoreCase("A")) {
+            identifier = "water.csv";
+        } else if (identifier.equalsIgnoreCase("B")) {
+            identifier = "air.csv";
+        } else if (identifier.equalsIgnoreCase("C")) {
+            identifier = "fire.csv";
+        } else {
+            identifier = "earth.csv";
+        }
+
+        // The program begins filling out a new line in the corresponding .csv file.
+        // (water.csv, air.csv, fire.csv, or earth.csv)
+        try {
+            FileWriter myWriter = new FileWriter(identifier, true);
+            myWriter.write(user + ",");
+            for (int i = 0; i < results.length; i++) {
+                if (i != results.length - 1) {
+                    myWriter.write(results[i] + ",");
+                } else {
+                    myWriter.write(results[i] + "\n");
+                }
+            }
+            myWriter.close();
+        } catch (IOException error) {
+            System.out.println("Error");
+            error.printStackTrace();
+        }
+    }
+
+    // So the user only has to enter a, b, c, or d instead of typing the entire
+    // word.
+    public static String selectionToString(String selection) {
+        if (selection.equalsIgnoreCase("A")) {
+            return "Water";
+        } else if (selection.equalsIgnoreCase("B")) {
+            return "Air";
+        } else if (selection.equalsIgnoreCase("C")) {
+            return "Fire";
+        } else {
+            return "Earth";
+        }
+    }
+
+    // ML Guess:
+    // The probability model takes the answer for a given question n and correlates
+    // with a probability P that this question indicates the users identifier will
+    // be element e (question 6).
+    // P(qN = n | identifier = e) 0.25 is chance but anything higher is correlation.
+    // We then used those probabilites to assign weights to each question.
+    // The values are a mix of pseudorandom and biased inputs, as
+    // the dataset serves only as a proof of concept for a ML guess.
+    // Water sample size = 50:
+    // Q1 = 82% Q2 = 78%, Q3 = 84%, Q4 = 80%, Q5 = 96%
+    // Air sample size = 50:
+    // Q1 = 42% Q2 = 56%, Q3 = 36%, Q4 = 28%, Q5 = 50%
+    // Fire sample size = 50:
+    // Q1 = 32% Q2 = 44%, Q3 = 26%, Q4 = 36%, Q5 = 54%
+    // Earth sample size = 50:
+    // Q1 = 30% Q2 = 36%, Q3 = 38%, Q4 = 30%, Q5 = 78%
+    // These calculations were done by inputing the file csv to Weka
+    // explorer and performing a J48 tree analysis for correlation between
+    // each field "Question N" to the field "Identifier".
+
+    public static int eduGuess(String[] inputList) {
+        // Take string inputs if Q1 = Water store .82 into water estimate, if Air .42
+        // into air estimate
+        // Repeat the same for each question and sum all scores for each estimate array.
+        // Return value
+        // for estimate array with highest score.
+
+        double waterEst = 0.0; // return 1 if highest
+        double airEst = 0.0; // return 2 if highest
+        double fireEst = 0.0; // return 3 if highest
+        double earthEst = 0.0; // return 4 if highest
+        double[] sumTable = new double[4];
+        double[] waterTable = { 0.82, 0.78, 0.84, 0.80, 0.96 };
+        double[] airTable = { 0.42, 0.56, 0.36, 0.28, 0.50 };
+        double[] fireTable = { 0.32, 0.44, 0.26, 0.36, 0.54 };
+        double[] earthTable = { 0.30, 0.36, 0.38, 0.30, 0.78 };
+
+        for (int j = 0; j < inputList.length - 1; j++) {
+            if (inputList[j] == "Water") {
+                waterEst += waterTable[j];
+            } else if (inputList[j] == "Air") {
+                airEst += airTable[j];
+            } else if (inputList[j] == "Fire") {
+                fireEst += fireTable[j];
+            } else {
+                earthEst += earthTable[j];
+            }
+        }
+
+        // Fill sum table
+        sumTable[0] = waterEst;
+        sumTable[1] = airEst;
+        sumTable[2] = fireEst;
+        sumTable[3] = earthEst;
+        double max = 0.0;
+        int element = 0;
+        for (int i = 0; i < sumTable.length; i++) {
+            if (sumTable[i] > max) {
+                max = sumTable[i];
+                element = i + 1;
+            }
+        }
+
+        return element;
+    }
+
+}
